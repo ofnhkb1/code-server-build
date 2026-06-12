@@ -81,12 +81,8 @@ jobs:
       - name: checkout
         run: |
           mkdir -p source
-          git clone "https://github.com/coder/code-server.git" source/code-server
-          git -C source/code-server fetch --tags --force
-          git -C source/code-server checkout "v4.118.0"
-
-          git -C source/code-server submodule update --init --recursive
-
+          git clone --depth=1 --branch "v4.118.0" "https://github.com/coder/code-server.git" source/code-server
+          git -C source/code-server submodule update --init --recursive --depth=1
 
       - run:  cd source/code-server && quilt push -a
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
@@ -117,17 +113,17 @@ jobs:
       - run: cd source/code-server/ && tar -czf package.tar.gz release
         if: ${{ matrix.vscode_arch == 'x64' }}
       - run: |
-          sed "/^## Unreleased/,/^## / ! d" CHANGELOG.md | head -n -2 | tail -n +3 > .cache/release-notes
+          sed "/^## Unreleased/,/^## / ! d" source/code-server/CHANGELOG.md | head -n -2 | tail -n +3 > source/code-server/.cache/release-notes
         if: ${{ matrix.vscode_arch == 'x64' }}
       - uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1
         if: ${{ matrix.vscode_arch == 'x64' }}
         with:
           draft: true
           discussion_category_name: "📣 Announcements"
-          files: package.tar.gz
+          files: source/code-server/package.tar.gz
           tag_name: v${{ env.VERSION }}
           name: v${{ env.VERSION }}
-          body_path: .cache/release-notes
+          body_path: source/code-server/.cache/release-notes
 
       # Platform-specific release.
       - run: KEEP_MODULES=1 npm run release
@@ -136,6 +132,6 @@ jobs:
         with:
           draft: true
           discussion_category_name: "📣 Announcements"
-          files: ./release-packages/*
+          files: source/code-server/release-packages/*
           tag_name: v${{ env.VERSION }}
           name: v${{ env.VERSION }}
