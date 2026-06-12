@@ -83,7 +83,7 @@ jobs:
           mkdir -p source
           git clone "https://github.com/coder/code-server.git" source/code-server
           git -C source/code-server fetch --tags --force
-          git -C source/code-server checkout "v$VERSION"
+          git -C source/code-server checkout "v4.118.0"
 
           git submodule update --init --recursive
 
