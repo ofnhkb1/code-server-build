@@ -126,8 +126,8 @@ jobs:
           body_path: source/code-server/.cache/release-notes
 
       # Platform-specific release.
-      - run: KEEP_MODULES=1 npm run release
-      - run: npm run package
+      - run: cd source/code-server/ && KEEP_MODULES=1 npm run release
+      - run: cd source/code-server/ && npm run package
       - uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1
         with:
           draft: true
