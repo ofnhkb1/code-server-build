@@ -81,7 +81,7 @@ jobs:
       - name: checkout
         run: |
           mkdir -p source
-          git clone "https://x-access-token:${{ secrets.MIRROR_TOKEN }}@${CODE_SERVER_REPO#https://}" source/code-server
+          git clone "https://github.com/coder/code-server.git" source/code-server
           git -C source/code-server fetch --tags --force
           git -C source/code-server checkout "v$VERSION"
 
