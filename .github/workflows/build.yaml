@@ -6,6 +6,7 @@ on:
       version:
         type: string
         required: true
+        default: 'v4.118.0'
   pull_request_target:
     types:
       - closed
